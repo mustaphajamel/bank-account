@@ -9,11 +9,11 @@ import java.math.BigDecimal;
 @Data
 @Builder
 public class Account {
-    private BigDecimal balance;
+    private Money balance;
 
-    public BigDecimal deposit(BigDecimal amountToAdd) throws NegativeDepositAmountException {
-        if (amountToAdd.compareTo(BigDecimal.ZERO) < 0)
+    public Money deposit(Money amountToAdd) throws NegativeDepositAmountException {
+        if (amountToAdd.getAmount().compareTo(BigDecimal.ZERO) < 0)
             throw new NegativeDepositAmountException();
-        return balance.add(amountToAdd);
+        return balance.addAmount(amountToAdd);
     }
 }
