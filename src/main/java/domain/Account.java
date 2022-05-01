@@ -21,6 +21,6 @@ public class Account {
     }
 
     public Money withdraw(Money amountToWithdraw) {
-        return null;
+        return balance.retrieveAmount(amountToWithdraw);
     }
 }

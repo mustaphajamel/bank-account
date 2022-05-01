@@ -17,4 +17,9 @@ public class Money {
         this.amount = amount.add(amountToAdd.getAmount());
         return this;
     }
+
+    public Money retrieveAmount(Money amountToWithdraw) {
+        this.amount = amount.subtract(amountToWithdraw.getAmount());
+        return this;
+    }
 }
