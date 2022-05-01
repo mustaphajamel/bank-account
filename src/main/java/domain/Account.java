@@ -11,6 +11,6 @@ public class Account {
     private BigDecimal balance;
 
     public BigDecimal deposit(BigDecimal amountToAdd) {
-        return null;
+        return balance.add(amountToAdd);
     }
 }
