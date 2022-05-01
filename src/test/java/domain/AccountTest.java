@@ -1,5 +1,6 @@
 package domain;
 
+import exception.DifferentCurrencyOperationException;
 import exception.NegativeDepositAmountException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -64,5 +65,32 @@ public class AccountTest {
         assertEquals(new BigDecimal(1000), account.getBalance().getAmount());
     }
 
+    @Test
+    public void should_throw_exception_when_account_currency_is_different_from_operation_currency() {
+        //GIVEN
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+        Money amountToAdd = Money.builder()
+                .amount(new BigDecimal(200))
+                .currency(Currency.getInstance("USD"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+        //WHEN
+        DifferentCurrencyOperationException thrown = Assertions.assertThrows(
+                DifferentCurrencyOperationException.class,
+                () -> account.deposit(amountToAdd),
+                "Expected deposit method to throw, but it didn't"
+        );
+
+        //THEN
+        assertEquals("Operation currency should be the same of the account", thrown.getMessage());
+        assertEquals(new BigDecimal(1000), account.getBalance().getAmount());
+    }
 
 }
