@@ -13,7 +13,7 @@ public class Account {
 
     public BigDecimal deposit(BigDecimal amountToAdd) throws NegativeDepositAmountException {
         if (amountToAdd.compareTo(BigDecimal.ZERO) < 0)
-            throw new NegativeDepositAmountException("Stuff");
+            throw new NegativeDepositAmountException();
         return balance.add(amountToAdd);
     }
 }

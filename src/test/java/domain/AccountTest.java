@@ -44,7 +44,7 @@ public class AccountTest {
         );
 
         //THEN
-        assertTrue(thrown.getMessage().contains("Stuff"));
+        assertEquals("Could not add negative amount to balance", thrown.getMessage());
         assertEquals(new BigDecimal(1000), account.getBalance());
     }
 

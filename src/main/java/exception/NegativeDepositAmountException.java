@@ -1,7 +1,7 @@
 package exception;
 
 public class NegativeDepositAmountException extends Exception{
-    public NegativeDepositAmountException(String message) {
-        super(message);
+    public NegativeDepositAmountException() {
+        super("Could not add negative amount to balance");
     }
 }
