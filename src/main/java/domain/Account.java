@@ -22,7 +22,7 @@ public class Account {
     }
 
     public Money withdraw(Money amountToWithdraw) {
-        if (amountToWithdraw.getAmount().compareTo(balance.getAmount()) > 0)
+        if (balance.getAmount().compareTo(amountToWithdraw.getAmount()) < 0)
             throw new AmountToWithdrawHigherThanBalanceException();
         return balance.retrieveAmount(amountToWithdraw);
     }
