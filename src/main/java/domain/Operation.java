@@ -1,5 +1,6 @@
 package domain;
 
+import constant.Type;
 import lombok.Builder;
 import lombok.Data;
 import java.util.Date;
@@ -9,6 +10,6 @@ import java.util.Date;
 public class Operation {
     private Date date;
     private Money money;
-    private String type;
+    private Type type;
 
 }
