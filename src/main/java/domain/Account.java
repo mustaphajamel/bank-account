@@ -25,25 +25,31 @@ public class Account {
         if (!amountToAdd.getCurrency().equals(this.getBalance().getCurrency()))
             throw new DifferentCurrencyOperationException();
 
+        Money newBalance = balance.addAmount(amountToAdd);
+
         operations.add(Operation.builder()
-                .money(amountToAdd)
                 .date(new Date())
+                .money(amountToAdd)
                 .type(Type.DEPOSIT)
+                .balance(newBalance)
                 .build());
 
-        return balance.addAmount(amountToAdd);
+        return newBalance;
     }
 
     public Money withdraw(Money amountToWithdraw) {
         if (balance.getAmount().compareTo(amountToWithdraw.getAmount()) < 0)
             throw new AmountToWithdrawHigherThanBalanceException();
 
+        Money newBalance = balance.retrieveAmount(amountToWithdraw);
+
         operations.add(Operation.builder()
-                .money(amountToWithdraw)
                 .date(new Date())
+                .money(amountToWithdraw)
                 .type(Type.WITHDRAW)
+                .balance(newBalance)
                 .build());
 
-        return balance.retrieveAmount(amountToWithdraw);
+        return newBalance;
     }
 }
