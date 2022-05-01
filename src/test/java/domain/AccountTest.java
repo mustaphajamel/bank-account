@@ -1,5 +1,6 @@
 package domain;
 
+import constant.Type;
 import exception.AmountToWithdrawHigherThanBalanceException;
 import exception.DifferentCurrencyOperationException;
 import exception.NegativeDepositAmountException;
@@ -193,4 +194,56 @@ public class AccountTest {
         assertEquals(4, operations.size());
     }
 
+    @Test
+    public void should_create_deposit_operation_when_deposit_money() {
+        //GIVEN
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToDeposit = Money.builder()
+                .amount(new BigDecimal(300))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+        //WHEN
+        account.deposit(amountToDeposit);
+
+        //THEN
+        assertEquals(1, account.getOperations().size());
+        Operation operation = account.getOperations().get(0);
+        assertEquals(Type.DEPOSIT, operation.getType());
+        assertEquals(new BigDecimal(300), operation.getMoney().getAmount());
+    }
+    @Test
+    public void should_create_withdraw_operation_when_withdraw_money() {
+        //GIVEN
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdraw = Money.builder()
+                .amount(new BigDecimal(200))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+        //WHEN
+        account.withdraw(amountToWithdraw);
+
+        //THEN
+        assertEquals(1, account.getOperations().size());
+        Operation operation = account.getOperations().get(0);
+        assertEquals(Type.WITHDRAW, operation.getType());
+        assertEquals(new BigDecimal(200), operation.getMoney().getAmount());
+    }
 }
