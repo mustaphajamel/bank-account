@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -93,6 +94,7 @@ public class AccountTest {
         assertEquals("Operation currency should be the same of the account", thrown.getMessage());
         assertEquals(new BigDecimal(1000), account.getBalance().getAmount());
     }
+
     @Test
     public void should_retrieve_withdrawal_amount_from_balance() {
         //GIVEN
@@ -116,6 +118,7 @@ public class AccountTest {
         //THEN
         assertEquals(new BigDecimal(800), newBalance.getAmount());
     }
+
     @Test
     public void should_not_retrieve_money_amount_higher_than_balance() {
         //GIVEN
@@ -135,8 +138,8 @@ public class AccountTest {
 
 
         //WHEN
-         AmountToWithdrawHigherThanBalanceException thrown = Assertions.assertThrows(
-                 AmountToWithdrawHigherThanBalanceException.class,
+        AmountToWithdrawHigherThanBalanceException thrown = Assertions.assertThrows(
+                AmountToWithdrawHigherThanBalanceException.class,
                 () -> account.withdraw(amountToWithdraw),
                 "Expected withdraw method to throw an exception, but it didn't"
         );
@@ -146,5 +149,48 @@ public class AccountTest {
         assertEquals(new BigDecimal(1000), currentBalance.getAmount());
     }
 
+    @Test
+    public void should_list_all_operation_of_an_account() {
+        //GIVEN
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdrawTwoHundred = Money.builder()
+                .amount(new BigDecimal(200))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdrawFourHundred = Money.builder()
+                .amount(new BigDecimal(400))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToDepositFiveHundred = Money.builder()
+                .amount(new BigDecimal(500))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToDepositOneHundred = Money.builder()
+                .amount(new BigDecimal(100))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+        account.withdraw(amountToWithdrawTwoHundred);
+        account.withdraw(amountToWithdrawFourHundred);
+        account.deposit(amountToDepositFiveHundred);
+        account.deposit(amountToDepositOneHundred);
+
+        //WHEN
+        List<Operation> operations = account.getOperations();
+
+        //THEN
+        assertEquals(4, operations.size());
+    }
 
 }
