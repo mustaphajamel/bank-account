@@ -92,5 +92,28 @@ public class AccountTest {
         assertEquals("Operation currency should be the same of the account", thrown.getMessage());
         assertEquals(new BigDecimal(1000), account.getBalance().getAmount());
     }
+    @Test
+    public void should_retrieve_withdrawal_amount_from_balance() {
+        //GIVEN
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdraw = Money.builder()
+                .amount(new BigDecimal(200))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+        //WHEN
+        Money newBalance = account.withdraw(amountToWithdraw);
+
+        //THEN
+        assertEquals(new BigDecimal(800), newBalance.getAmount());
+    }
 
 }

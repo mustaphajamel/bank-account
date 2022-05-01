@@ -19,4 +19,8 @@ public class Account {
             throw new DifferentCurrencyOperationException();
         return balance.addAmount(amountToAdd);
     }
+
+    public Money withdraw(Money amountToWithdraw) {
+        return null;
+    }
 }
