@@ -12,10 +12,10 @@ import java.math.BigDecimal;
 public class Account {
     private Money balance;
 
-    public Money deposit(Money amountToAdd) throws NegativeDepositAmountException,DifferentCurrencyOperationException {
+    public Money deposit(Money amountToAdd) {
         if (amountToAdd.getAmount().compareTo(BigDecimal.ZERO) < 0)
             throw new NegativeDepositAmountException();
-        else if(!amountToAdd.getCurrency().equals(this.getBalance().getCurrency()))
+        if (!amountToAdd.getCurrency().equals(this.getBalance().getCurrency()))
             throw new DifferentCurrencyOperationException();
         return balance.addAmount(amountToAdd);
     }

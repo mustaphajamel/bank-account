@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.Currency;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class AccountTest {
 
     @Test
-    public void should_add_deposit_amount_to_balance() throws NegativeDepositAmountException, DifferentCurrencyOperationException {
+    public void should_add_deposit_amount_to_balance() {
         //GIVEN
         Money currentBalance = Money.builder()
                 .amount(new BigDecimal(1000))
