@@ -11,5 +11,6 @@ public class Operation {
     private Date date;
     private Money money;
     private Type type;
+    private Money balance;
 
 }

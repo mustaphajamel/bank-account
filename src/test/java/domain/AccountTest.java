@@ -219,6 +219,7 @@ public class AccountTest {
         Operation operation = account.getOperations().get(0);
         assertEquals(Type.DEPOSIT, operation.getType());
         assertEquals(new BigDecimal(300), operation.getMoney().getAmount());
+        assertEquals(new BigDecimal(1300), operation.getBalance().getAmount());
     }
     @Test
     public void should_create_withdraw_operation_when_withdraw_money() {
@@ -245,5 +246,6 @@ public class AccountTest {
         Operation operation = account.getOperations().get(0);
         assertEquals(Type.WITHDRAW, operation.getType());
         assertEquals(new BigDecimal(200), operation.getMoney().getAmount());
+        assertEquals(new BigDecimal(800), operation.getBalance().getAmount());
     }
 }
