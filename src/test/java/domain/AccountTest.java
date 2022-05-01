@@ -17,6 +17,7 @@ import java.util.Currency;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class AccountTest {
@@ -226,6 +227,7 @@ public class AccountTest {
         assertEquals(new BigDecimal(300), operation.getMoney().getAmount());
         assertEquals(new BigDecimal(1300), operation.getBalance().getAmount());
     }
+
     @Test
     public void should_create_withdraw_operation_when_withdraw_money() {
         //GIVEN
@@ -253,6 +255,7 @@ public class AccountTest {
         assertEquals(new BigDecimal(200), operation.getMoney().getAmount());
         assertEquals(new BigDecimal(800), operation.getBalance().getAmount());
     }
+
     @Test
     public void should_display_all_operations() {
         //GIVEN
@@ -284,8 +287,8 @@ public class AccountTest {
                 .currency(Currency.getInstance("EUR"))
                 .build();
 
-        Money amountToDepositOneHundred = Money.builder()
-                .amount(new BigDecimal(100))
+        Money amountToDepositTwoHundred = Money.builder()
+                .amount(new BigDecimal(200))
                 .currency(Currency.getInstance("EUR"))
                 .build();
 
@@ -296,7 +299,7 @@ public class AccountTest {
         account.withdraw(amountToWithdrawTwoHundred);
         account.withdraw(amountToWithdrawFourHundred);
         account.deposit(amountToDepositFiveHundred);
-        account.deposit(amountToDepositOneHundred);
+        account.deposit(amountToDepositTwoHundred);
 
         //WHEN
         account.displayOperations();
@@ -305,13 +308,31 @@ public class AccountTest {
         List<ILoggingEvent> logsList = listAppender.list;
         assertEquals("Start displaying operations", logsList.get(0)
                 .getMessage());
-
         assertEquals(Level.INFO, logsList.get(0)
                 .getLevel());
 
-        assertEquals("End displaying operations", logsList.get(1)
-                .getMessage());
+        assertTrue(logsList.get(1).getMessage().contains("amount of operation=200 EUR, type of operation=WITHDRAW," +
+                " balance after operation=800 EUR]"));
         assertEquals(Level.INFO, logsList.get(1)
+                .getLevel());
+
+        assertTrue(logsList.get(2).getMessage().contains("amount of operation=400 EUR, type of operation=WITHDRAW, " +
+                "balance after operation=400 EUR]"));
+        assertEquals(Level.INFO, logsList.get(2).getLevel());
+
+        assertTrue(logsList.get(3).getMessage().contains("amount of operation=500 EUR, type of operation=DEPOSIT, " +
+                "balance after operation=900 EUR]"));
+        assertEquals(Level.INFO, logsList.get(3)
+                .getLevel());
+
+        assertTrue(logsList.get(4).getMessage().contains("amount of operation=200 EUR, type of operation=DEPOSIT, " +
+                "balance after operation=1100 EUR]"));
+        assertEquals(Level.INFO, logsList.get(4)
+                .getLevel());
+
+        assertEquals("End displaying operations", logsList.get(5)
+                .getMessage());
+        assertEquals(Level.INFO, logsList.get(5)
                 .getLevel());
     }
 

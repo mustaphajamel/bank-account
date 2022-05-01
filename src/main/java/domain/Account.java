@@ -31,36 +31,45 @@ public class Account {
         if (!amountToAdd.getCurrency().equals(this.getBalance().getCurrency()))
             throw new DifferentCurrencyOperationException();
 
-        Money newBalance = balance.addAmount(amountToAdd);
+        this.balance = balance.addAmount(amountToAdd);
 
         operations.add(Operation.builder()
                 .date(new Date())
                 .money(amountToAdd)
                 .type(Type.DEPOSIT)
-                .balance(newBalance)
+                .balance(Money.builder()
+                        .amount(this.balance.getAmount())
+                        .currency(this.balance.getCurrency())
+                        .build())
                 .build());
 
-        return newBalance;
+        return balance;
     }
 
     public Money withdraw(Money amountToWithdraw) {
         if (balance.getAmount().compareTo(amountToWithdraw.getAmount()) < 0)
             throw new AmountToWithdrawHigherThanBalanceException();
 
-        Money newBalance = balance.retrieveAmount(amountToWithdraw);
+        this.balance = balance.retrieveAmount(amountToWithdraw);
 
         operations.add(Operation.builder()
                 .date(new Date())
                 .money(amountToWithdraw)
                 .type(Type.WITHDRAW)
-                .balance(newBalance)
+                .balance(Money.builder()
+                        .amount(this.balance.getAmount())
+                        .currency(this.balance.getCurrency())
+                        .build())
                 .build());
 
-        return newBalance;
+        return balance;
     }
 
     public void displayOperations() {
         LOGGER.info("Start displaying operations");
+        for (Operation op : operations) {
+            LOGGER.info(op.toString());
+        }
         LOGGER.info("End displaying operations");
     }
 }
