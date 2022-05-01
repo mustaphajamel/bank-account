@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AccountTest {
 
     @Test
-    public void should_add_deposit_amount_to_balance() throws NegativeDepositAmountException {
+    public void should_add_deposit_amount_to_balance() throws NegativeDepositAmountException, DifferentCurrencyOperationException {
         //GIVEN
         Money currentBalance = Money.builder()
                 .amount(new BigDecimal(1000))
