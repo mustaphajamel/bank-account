@@ -1,5 +1,6 @@
 package domain;
 
+import exception.NegativeDepositAmountException;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 public class Account {
     private BigDecimal balance;
 
-    public BigDecimal deposit(BigDecimal amountToAdd) {
+    public BigDecimal deposit(BigDecimal amountToAdd) throws NegativeDepositAmountException {
         if (amountToAdd.compareTo(BigDecimal.ZERO) < 0)
             return balance;
         return balance.add(amountToAdd);
