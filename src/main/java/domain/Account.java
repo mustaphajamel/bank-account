@@ -67,9 +67,7 @@ public class Account {
 
     public void displayOperations() {
         LOGGER.info("Start displaying operations");
-        for (Operation op : operations) {
-            LOGGER.info(op.toString());
-        }
+        operations.forEach(op -> LOGGER.info(op.toString()));
         LOGGER.info("End displaying operations");
     }
 }
