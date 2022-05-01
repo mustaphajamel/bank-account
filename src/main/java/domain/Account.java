@@ -1,5 +1,8 @@
 package domain;
 
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
+
 import constant.Type;
 import exception.AmountToWithdrawHigherThanBalanceException;
 import exception.DifferentCurrencyOperationException;
@@ -15,6 +18,9 @@ import java.util.List;
 @Data
 @Builder
 public class Account {
+
+    static final Logger LOGGER = (Logger) LoggerFactory.getLogger(Account.class);
+
     private Money balance;
     @Builder.Default
     private List<Operation> operations = new ArrayList<>();
@@ -51,5 +57,10 @@ public class Account {
                 .build());
 
         return newBalance;
+    }
+
+    public void displayOperations() {
+        LOGGER.info("Start displaying operations");
+        LOGGER.info("End displaying operations");
     }
 }

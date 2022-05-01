@@ -1,11 +1,16 @@
 package domain;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 import constant.Type;
 import exception.AmountToWithdrawHigherThanBalanceException;
 import exception.DifferentCurrencyOperationException;
 import exception.NegativeDepositAmountException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ch.qos.logback.classic.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.Currency;
@@ -248,4 +253,66 @@ public class AccountTest {
         assertEquals(new BigDecimal(200), operation.getMoney().getAmount());
         assertEquals(new BigDecimal(800), operation.getBalance().getAmount());
     }
+    @Test
+    public void should_display_all_operations() {
+        //GIVEN
+        Logger accountLogger = (Logger) LoggerFactory.getLogger(Account.class);
+
+        ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
+        listAppender.start();
+
+        accountLogger.addAppender(listAppender);
+
+
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdrawTwoHundred = Money.builder()
+                .amount(new BigDecimal(200))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdrawFourHundred = Money.builder()
+                .amount(new BigDecimal(400))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToDepositFiveHundred = Money.builder()
+                .amount(new BigDecimal(500))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToDepositOneHundred = Money.builder()
+                .amount(new BigDecimal(100))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+        account.withdraw(amountToWithdrawTwoHundred);
+        account.withdraw(amountToWithdrawFourHundred);
+        account.deposit(amountToDepositFiveHundred);
+        account.deposit(amountToDepositOneHundred);
+
+        //WHEN
+        account.displayOperations();
+
+        //THEN
+        List<ILoggingEvent> logsList = listAppender.list;
+        assertEquals("Start displaying operations", logsList.get(0)
+                .getMessage());
+
+        assertEquals(Level.INFO, logsList.get(0)
+                .getLevel());
+
+        assertEquals("End displaying operations", logsList.get(1)
+                .getMessage());
+        assertEquals(Level.INFO, logsList.get(1)
+                .getLevel());
+    }
+
 }
