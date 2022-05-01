@@ -1,5 +1,6 @@
 package domain;
 
+import exception.AmountToWithdrawHigherThanBalanceException;
 import exception.DifferentCurrencyOperationException;
 import exception.NegativeDepositAmountException;
 import lombok.Builder;
@@ -21,6 +22,8 @@ public class Account {
     }
 
     public Money withdraw(Money amountToWithdraw) {
+        if (amountToWithdraw.getAmount().compareTo(balance.getAmount()) > 0)
+            throw new AmountToWithdrawHigherThanBalanceException();
         return balance.retrieveAmount(amountToWithdraw);
     }
 }

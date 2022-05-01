@@ -1,5 +1,6 @@
 package domain;
 
+import exception.AmountToWithdrawHigherThanBalanceException;
 import exception.DifferentCurrencyOperationException;
 import exception.NegativeDepositAmountException;
 import org.junit.jupiter.api.Assertions;
@@ -114,6 +115,35 @@ public class AccountTest {
 
         //THEN
         assertEquals(new BigDecimal(800), newBalance.getAmount());
+    }
+    @Test
+    public void should_not_retrieve_money_amount_higher_than_balance() {
+        //GIVEN
+        Money currentBalance = Money.builder()
+                .amount(new BigDecimal(1000))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Money amountToWithdraw = Money.builder()
+                .amount(new BigDecimal(1200))
+                .currency(Currency.getInstance("EUR"))
+                .build();
+
+        Account account = Account.builder()
+                .balance(currentBalance)
+                .build();
+
+
+        //WHEN
+         AmountToWithdrawHigherThanBalanceException thrown = Assertions.assertThrows(
+                 AmountToWithdrawHigherThanBalanceException.class,
+                () -> account.withdraw(amountToWithdraw),
+                "Expected withdraw method to throw an exception, but it didn't"
+        );
+
+        //THEN
+        assertEquals("Amount to withdraw is higher than current balance", thrown.getMessage());
+        assertEquals(new BigDecimal(1000), currentBalance.getAmount());
     }
 
 
